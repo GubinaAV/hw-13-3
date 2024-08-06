@@ -43,6 +43,20 @@
 - На проверку отправьте получившуюся схему в формате pkt и скриншот, где виден процесс настройки маршрутизатора.
 
 #### Решение 1
+ Конифгурация маршрутизатора 1
+ ![Router1_cfg](https://github.com/GubinaAV/8-03-hw/blob/main/img/Router1-cfg.png)
+ Конифгурация маршрутизатора 2
+ ![Router2_cfg](https://github.com/GubinaAV/8-03-hw/blob/main/img/Router2-cfg.png)
+
+ Пинги при обеих целых линиях:
+ ![Router1_cfg](https://github.com/GubinaAV/8-03-hw/blob/main/img/ping_full.png)
+ Пинги вариант 1:
+ ![Router1_cfg](https://github.com/GubinaAV/8-03-hw/blob/main/img/ping_1.png)
+ Пинги вариант 2:
+ ![Router1_cfg](https://github.com/GubinaAV/8-03-hw/blob/main/img/ping_2.png)
+
+ Ссылка на модифицированную схему:
+  ![Mod_scheme](https://github.com/GubinaAV/8-03-hw/blob/main/img/hsrp_advanced_GAV.pkt)
 
 ------
 
