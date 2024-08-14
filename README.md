@@ -72,6 +72,25 @@
 - На проверку отправьте получившейся bash-скрипт и конфигурационный файл keepalived, а также скриншот с демонстрацией переезда плавающего ip на другой сервер в случае недоступности порта или файла index.html
 
 #### Решение 2
+Bash-скрипт проверки:  
+ ![check.sh](https://github.com/GubinaAV/8-03-hw/blob/main/files/check.sh)
+
+Конфигурационные файлы:  
+ ![master](https://github.com/GubinaAV/8-03-hw/blob/main/files/(174)keepalived.conf)  
+ ![backup](https://github.com/GubinaAV/8-03-hw/blob/main/files/(175)keepalived.conf)  
+
+Nginx на master  
+![nginx@master](https://github.com/GubinaAV/8-03-hw/blob/main/img/174-174.png)  
+Nginx на backup  
+![nginx@backup](https://github.com/GubinaAV/8-03-hw/blob/main/img/175-175.png)  
+Nginx на плавающем адресе (master-174)  
+![240via174](https://github.com/GubinaAV/8-03-hw/blob/main/img/240via174.png)  
+
+Nginx на плавающем адресе (удалён файл страницы на master)  
+![240via174](https://github.com/GubinaAV/8-03-hw/blob/main/img/240(!html@master).png)  
+
+Nginx на плавающем адресе (backup, остановлен nginx на master)  
+![240via174](https://github.com/GubinaAV/8-03-hw/blob/main/img/240(!nginx@master).png)  
 
 ------
 
