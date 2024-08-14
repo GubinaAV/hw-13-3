@@ -59,7 +59,7 @@
  ![Router1_cfg](https://github.com/GubinaAV/8-03-hw/blob/main/img/ping_2.png)  
 
  Ссылка на модифицированную схему:
-  ![Mod_scheme](https://github.com/GubinaAV/8-03-hw/blob/main/img/hsrp_advanced_GAV.pkt)  
+  ![Mod_scheme](https://github.com/GubinaAV/8-03-hw/blob/main/files/hsrp_advanced_GAV.pkt)  
 
 ------
 
