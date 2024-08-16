@@ -1,4 +1,4 @@
-# Домашнее задание к занятию «Кеширование Redis/memcached»
+# Домашнее задание к занятию «ELK»
 
 ### Инструкция по выполнению домашнего задания
 
@@ -17,59 +17,68 @@
 
 ---
 
-### Задание 1. Кеширование 
+## Дополнительные ресурсы
 
-Приведите примеры проблем, которые может решить кеширование. 
+При выполнении задания используйте дополнительные ресурсы:
+- [docker-compose elasticsearch + kibana](11-03/docker-compose.yaml);
+- [поднимаем elk в docker](https://www.elastic.co/guide/en/elasticsearch/reference/7.17/docker.html);
+- [поднимаем elk в docker с filebeat и docker-логами](https://www.sarulabs.com/post/5/2019-08-12/sending-docker-logs-to-elasticsearch-and-kibana-with-filebeat.html);
+- [конфигурируем logstash](https://www.elastic.co/guide/en/logstash/7.17/configuration.html);
+- [плагины filter для logstash](https://www.elastic.co/guide/en/logstash/current/filter-plugins.html);
+- [конфигурируем filebeat](https://www.elastic.co/guide/en/beats/libbeat/5.3/config-file-format.html);
+- [привязываем индексы из elastic в kibana](https://www.elastic.co/guide/en/kibana/7.17/index-patterns.html);
+- [как просматривать логи в kibana](https://www.elastic.co/guide/en/kibana/current/discover.html);
+- [решение ошибки increase vm.max_map_count elasticsearch](https://stackoverflow.com/questions/42889241/how-to-increase-vm-max-map-count).
 
-*Приведите ответ в свободной форме.*
+**Примечание**: если у вас недоступны официальные образы, можете найти альтернативные варианты в DockerHub, например, [такой](https://hub.docker.com/layers/bitnami/elasticsearch/7.17.13/images/sha256-8084adf6fa1cf24368337d7f62292081db721f4f05dcb01561a7c7e66806cc41?context=explore).
+
+### Задание 1. Elasticsearch 
+
+Установите и запустите Elasticsearch, после чего поменяйте параметр cluster_name на случайный. 
+
+*Приведите скриншот команды 'curl -X GET 'localhost:9200/_cluster/health?pretty', сделанной на сервере с установленным Elasticsearch. Где будет виден нестандартный cluster_name*.
+
 #### Решение 1  
-Кеширование может решить следующие проблемы:
-  * Медленный доступ к данным. Когда данные хранятся далеко (например, на удаленном сервере), каждый раз их получение занимает много времени. Кэширование позволяет «подтянуть» эти данные поближе, сокращая время ожидания. 
-  * Повторная обработка данных. Кеширование позволяет избегать создания новых запросов или повторной обработки данных. Так можно избежать накладных расходов, например, на сеть, и уменьшить использование центрального процессора. Это может продлить срок службы машин или серверов.
-  * Перегрузка сервера. Кеширование веб-сервера позволяет избежать перегрузки серверов, сокращая объём работы, которую необходимо выполнить, и улучшает скорость доставки страниц. 
+![solution 1](https://github.com/GubinaAV/11-03-hw/blob/main/img/pic01.jpg)  
 
 ---
 
-### Задание 2. Memcached
+### Задание 2. Kibana
 
-Установите и запустите memcached.
+Установите и запустите Kibana.
 
-*Приведите скриншот systemctl status memcached, где будет видно, что memcached запущен.*
+*Приведите скриншот интерфейса Kibana на странице http://<ip вашего сервера>:5601/app/dev_tools#/console, где будет выполнен запрос GET /_cluster/health?pretty*.
 #### Решение 2  
-Установка  
-
-sudo apt update && sudo apt install memcached
-memcached -V
-sudo netstat -tap | grep memcached
-sudo systemctl status memcached
-
-![solution2](https://github.com/GubinaAV/11-02-hw/blob/main/img/pic1.png)
+![solution 2](https://github.com/GubinaAV/11-03-hw/blob/main/img/pic02.jpg)
 
 ---
 
-### Задание 3. Удаление по TTL в Memcached
+### Задание 3. Logstash
 
-Запишите в memcached несколько ключей с любыми именами и значениями, для которых выставлен TTL 5. 
+Установите и запустите Logstash и Nginx. С помощью Logstash отправьте access-лог Nginx в Elasticsearch. 
 
-*Приведите скриншот, на котором видно, что спустя 5 секунд ключи удалились из базы.*
+*Приведите скриншот интерфейса Kibana, на котором видны логи Nginx.*
 #### Решение 3  
-![solution3](https://github.com/GubinaAV/11-02-hw/blob/main/img/pic2.png)
+![solution 3.1](https://github.com/GubinaAV/11-03-hw/blob/main/img/pic03.1.jpg)  
+![solution 3.2](https://github.com/GubinaAV/11-03-hw/blob/main/img/pic03.2.jpg)
+
 ---
 
-### Задание 4. Запись данных в Redis
+### Задание 4. Filebeat. 
 
-Запишите в Redis несколько ключей с любыми именами и значениями. 
+Установите и запустите Filebeat. Переключите поставку логов Nginx с Logstash на Filebeat. 
 
-*Через redis-cli достаньте все записанные ключи и значения из базы, приведите скриншот этой операции.*
+*Приведите скриншот интерфейса Kibana, на котором видны логи Nginx, которые были отправлены через Filebeat.*
 #### Решение 4  
-![solution4](https://github.com/GubinaAV/11-02-hw/blob/main/img/pic3.png)
-
+![solution 4.1](https://github.com/GubinaAV/11-03-hw/blob/main/img/pic04.1.jpg)  
+![solution 4.2](https://github.com/GubinaAV/11-03-hw/blob/main/img/pic04.2.jpg)
 
 ## Дополнительные задания (со звёздочкой*)
-Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже разобраться в материале.
+Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже шире разобраться в материале.
 
-### Задание 5*. Работа с числами 
+### Задание 5*. Доставка данных 
 
-Запишите в Redis ключ key5 со значением типа "int" равным числу 5. Увеличьте его на 5, чтобы в итоге в значении лежало число 10.  
+Настройте поставку лога в Elasticsearch через Logstash и Filebeat любого другого сервиса , но не Nginx. 
+Для этого лог должен писаться на файловую систему, Logstash должен корректно его распарсить и разложить на поля. 
 
-*Приведите скриншот, где будут проделаны все операции и будет видно, что значение key5 стало равно 10.*
+*Приведите скриншот интерфейса Kibana, на котором будет виден этот лог и напишите лог какого приложения отправляется.*
