@@ -47,8 +47,7 @@ FLUSH PRIVILEGES;
 
 1.5. Выполните запрос на получение списка прав для пользователя sys_temp. (скриншот)
 ```
-GRANT ALL PRIVILEGES ON *.* TO sys_temp'@'localhost' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
+ show grants for sys_temp@localhost;
 ```  
 
 ![Скриншот-1.5](https://github.com/GubinaAV/12-02/blob/main/img/1.5.png)  
