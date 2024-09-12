@@ -1,4 +1,4 @@
-# Домашнее задание к занятию «Работа с данными (DDL/DML)»
+# Домашнее задание к занятию «SQL. Часть 1»
 
 ### Инструкция по выполнению домашнего задания
 
@@ -20,113 +20,60 @@
 Задание можно выполнить как в любом IDE, так и в командной строке.
 
 ### Задание 1
-1.1. Поднимите чистый инстанс MySQL версии 8.0+. Можно использовать локальный сервер или контейнер Docker.
-```  
-sudo apt update
-sudo apt-get install mysql-server
-```  
 
-1.2. Создайте учётную запись sys_temp.
+Получите уникальные названия районов из таблицы с адресами, которые начинаются на “K” и заканчиваются на “a” и не содержат пробелов.
+#### Решение 1  
 ```  
-CREATE USER 'sys_temp'@'localhost' IDENTIFIED BY 'secret';
-FLUSH PRIVILEGES;
-```   
-
-1.3. Выполните запрос на получение списка пользователей в базе данных. (скриншот)  
+mysql> 
+SELECT DISTINCT district FROM address WHERE district LIKE "K%a" AND district NOT LIKE "% %";
 ```  
-SELECT user,host FROM mysql.user;
-```  
-
-![Скриншот-1.3](https://github.com/GubinaAV/12-02/blob/main/img/1.3.png)  
-
-1.4. Дайте все права для пользователя sys_temp. 
-```
-GRANT ALL PRIVILEGES ON *.* TO sys_temp'@'localhost' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
-```  
-
-1.5. Выполните запрос на получение списка прав для пользователя sys_temp. (скриншот)
-```
- show grants for sys_temp@localhost;
-```  
-
-![Скриншот-1.5](https://github.com/GubinaAV/12-02/blob/main/img/1.5.png)  
-
-1.6. Переподключитесь к базе данных от имени sys_temp.
-```  
-mysql -u sys_temp -p
-```  
-Для смены типа аутентификации с sha2 используйте запрос: 
-```sql
-ALTER USER 'sys_test'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
-```
-1.6. По ссылке https://downloads.mysql.com/docs/sakila-db.zip скачайте дамп базы данных.  
-```wget -c https://downloads.mysql.com/docs/sakila-db.zip```  
-
-1.7. Восстановите дамп в базу данных.  
-```unzip sakila-db.zip```
-
-1.8. При работе в IDE сформируйте ER-диаграмму получившейся базы данных. При работе в командной строке используйте команду для получения всех таблиц базы данных. (скриншот)  
-```show tables;```  
-Скриншот из командной строки:  
-![Скриншот-1.8(cmd)](https://github.com/GubinaAV/12-02/blob/main/img/1.8(cmd).png)  
-
-Скриншот ER из Beaver:  
-![Скриншот-1.8(cmd)](https://github.com/GubinaAV/12-02/blob/main/img/1.8(ER@Beaver).png)
-
-*Результатом работы должны быть скриншоты обозначенных заданий, а также простыня со всеми запросами.*  
-
-bash:
-```
-sudo apt update
-sudo apt-get install mysql-server
-```  
-
-mysql -u root -p
-```
-CREATE USER 'sys_temp'@'localhost' IDENTIFIED BY 'secret';
-FLUSH PRIVILEGES;
-SELECT user,host FROM mysql.user;
-GRANT ALL PRIVILEGES ON *.* TO sys_temp'@'localhost' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
-GRANT ALL PRIVILEGES ON *.* TO sys_temp'@'localhost' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
-```  
-mysql -u sys_temp -p  
-```
-ALTER USER 'sys_temp'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
-```
-
-bash  
-```  
-wget -c https://downloads.mysql.com/docs/sakila-db.zip
-unzip sakila-db.zip
-```  
-
-mysql -u sys_temp -p>
-```  
-create database sakila;
-source /root/sakila-db/sakila-schema.sql;
-source /root/sakila-db/sakila-data.sql;
-show tables;
-```  
+![Скриншот-1](https://github.com/GubinaAV/12-03/blob/main/img/SQL1.png)  
 
 ### Задание 2
-Составьте таблицу, используя любой текстовый редактор или Excel, в которой должно быть два столбца: в первом должны быть названия таблиц восстановленной базы, во втором названия первичных ключей этих таблиц. Пример: (скриншот/текст)
-```
-Название таблицы | Название первичного ключа
-customer         | customer_id
-```
-#### Решение 2
-![Файл первичных ключей таблиц](https://github.com/GubinaAV/12-02/blob/main/files/sakila_pri_id.txt)  
 
+Получите из таблицы платежей за прокат фильмов информацию по платежам, которые выполнялись в промежуток с 15 июня 2005 года по 18 июня 2005 года **включительно** и стоимость которых превышает 10.00.
+
+#### Решение 2  
+```  
+mysql> SELECT payment_id, payment_date, amount FROM payment WHERE payment_date BETWEEN '2005-06-15' AND '2005-06-19' AND amount > 10.00 ORDER BY payment_date ASC;
+```  
+![Скриншот-2](https://github.com/GubinaAV/12-03/blob/main/img/SQL2.png)  
+### Задание 3
+
+Получите последние пять аренд фильмов.  
+
+#### Решение 3
+```  
+mysql> SELECT rental_id, payment_id, payment_date FROM payment ORDER BY payment_date DESC LIMIT 5;
+```  
+![Скриншот-3](https://github.com/GubinaAV/12-03/blob/main/img/SQL3.png)  
+
+### Задание 4
+
+Одним запросом получите активных покупателей, имена которых Kelly или Willie. 
+
+Сформируйте вывод в результат таким образом:
+- все буквы в фамилии и имени из верхнего регистра переведите в нижний регистр,
+- замените буквы 'll' в именах на 'pp'.  
+#### Решение 4  
+```  
+mysql> SELECT LOWER (last_name) AS last_name, LOWER (first_name) AS first_name, REPLACE (LOWER (first_name), 'll', 'pp') AS new_first_name FROM customer WHERE first_name = 'Kelly' OR first_name = 'Willie' AND active = 1;
+
+```  
+![Скриншот-4](https://github.com/GubinaAV/12-03/blob/main/img/SQL4.png)  
 
 ## Дополнительные задания (со звёздочкой*)
 Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже шире разобраться в материале.
 
-### Задание 3*
-3.1. Уберите у пользователя sys_temp права на внесение, изменение и удаление данных из базы sakila.
+### Задание 5*
 
-3.2. Выполните запрос на получение списка прав для пользователя sys_temp. (скриншот)
+Выведите Email каждого покупателя, разделив значение Email на две отдельных колонки: в первой колонке должно быть значение, указанное до @, во второй — значение, указанное после @.
+#### Решение 5*  
+```  
+mysql> SELECT email,  SUBSTRING_INDEX(email, '@', 1) AS left_part, SUBSTRING_INDEX(email, '@', -1) AS right_part FROM customer;
+```  
+![Скриншот-5](https://github.com/GubinaAV/12-03/blob/main/img/SQL5.png)  
 
-*Результатом работы должны быть скриншоты обозначенных заданий, а также простыня со всеми запросами.*
+### Задание 6*
+
+Доработайте запрос из предыдущего задания, скорректируйте значения в новых колонках: первая буква должна быть заглавной, остальные — строчными.
