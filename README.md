@@ -34,8 +34,15 @@ SELECT DISTINCT district FROM address WHERE district LIKE "K%a" AND district NOT
 Получите из таблицы платежей за прокат фильмов информацию по платежам, которые выполнялись в промежуток с 15 июня 2005 года по 18 июня 2005 года **включительно** и стоимость которых превышает 10.00.
 
 #### Решение 2  
-```  
-mysql> SELECT payment_id, payment_date, amount FROM payment WHERE payment_date BETWEEN '2005-06-15' AND '2005-06-19' AND amount > 10.00 ORDER BY payment_date ASC;
+  
+~~mysql> SELECT payment_id, payment_date, amount FROM payment WHERE payment_date BETWEEN '2005-06-15' AND '2005-06-19' AND amount > 10.00 ORDER BY payment_date ASC;~~
+
+```
+вариант исправления 1:
+mysql> SELECT payment_id, payment_date, amount FROM payment WHERE payment_date > '2005-06-15' AND payment_date < '2005-06-19' AND amount > 10.00 ORDER BY payment_date ASC;  
+
+вариант исправления 2 (в лоб, не очень "красиво", но всё же):
+mysql> SELECT payment_id, payment_date, amount FROM payment WHERE payment_date > '2005-06-15' AND payment_date <= '2005-06-18 23:59:59' AND amount > 10.00 ORDER BY payment_date ASC;
 ```  
 ![Скриншот-2](https://github.com/GubinaAV/12-03/blob/main/img/SQL2.png)  
 ### Задание 3
