@@ -1,4 +1,4 @@
-# Домашнее задание к занятию «SQL. Часть 1»
+# Домашнее задание к занятию «SQL. Часть 2»
 
 ### Инструкция по выполнению домашнего задания
 
@@ -21,66 +21,45 @@
 
 ### Задание 1
 
-Получите уникальные названия районов из таблицы с адресами, которые начинаются на “K” и заканчиваются на “a” и не содержат пробелов.
+Одним запросом получите информацию о магазине, в котором обслуживается более 300 покупателей, и выведите в результат следующую информацию: 
+- фамилия и имя сотрудника из этого магазина;
+- город нахождения магазина;
+- количество пользователей, закреплённых в этом магазине.
 #### Решение 1  
+```sql
+SELECT CONCAT(staff.first_name, ' ', staff.last_name) AS employee_name, city.city AS store_city,
+COUNT(customer.customer_id) AS customer_count FROM store JOIN staff ON store.manager_staff_id = staff.staff_id JOIN address ON store.address_id = address.address_id
+JOIN city ON address.city_id = city.city_id JOIN customer ON store.store_id = customer.store_id GROUP BY store.store_id HAVING customer_count > 300;
 ```  
-mysql> 
-SELECT DISTINCT district FROM address WHERE district LIKE "K%a" AND district NOT LIKE "% %";
-```  
-![Скриншот-1](https://github.com/GubinaAV/12-03/blob/main/img/SQL1.png)  
+![Скриншот 1(DBEaver)](https://github.com/GubinaAV/12-04/blob/main/img/screen1(DBr).png)  
+![Скриншот 1(MYSQL_cmd)](https://github.com/GubinaAV/12-04/blob/main/img/screen1(MSQLc).png)
 
 ### Задание 2
 
-Получите из таблицы платежей за прокат фильмов информацию по платежам, которые выполнялись в промежуток с 15 июня 2005 года по 18 июня 2005 года **включительно** и стоимость которых превышает 10.00.
-
-#### Решение 2  
-  
-~~mysql> SELECT payment_id, payment_date, amount FROM payment WHERE payment_date BETWEEN '2005-06-15' AND '2005-06-19' AND amount > 10.00 ORDER BY payment_date ASC;~~
-
+Получите количество фильмов, продолжительность которых больше средней продолжительности всех фильмов.
+#### Решение 2
+```sql
+SELECT (SELECT  AVG(`length`) from film) AS Average, COUNT(1) AS 'Long Films' FROM film  WHERE `length` > (SELECT AVG(`length`) from film);
 ```
-вариант исправления 1:
-mysql> SELECT payment_id, payment_date, amount FROM payment WHERE payment_date > '2005-06-15' AND payment_date < '2005-06-19' AND amount > 10.00 ORDER BY payment_date ASC;  
+![Скриншот 2(DBEaver)](https://github.com/GubinaAV/12-04/blob/main/img/screen2(DBr).png)  
+![Скриншот 2(MYSQL_cmd)](https://github.com/GubinaAV/12-04/blob/main/img/screen2(MSQLc).png)
 
-вариант исправления 2 (в лоб, не очень "красиво", но всё же):
-mysql> SELECT payment_id, payment_date, amount FROM payment WHERE payment_date > '2005-06-15' AND payment_date <= '2005-06-18 23:59:59' AND amount > 10.00 ORDER BY payment_date ASC;
-```  
-![Скриншот-2](https://github.com/GubinaAV/12-03/blob/main/img/SQL2.png)  
 ### Задание 3
 
-Получите последние пять аренд фильмов.  
-
-#### Решение 3
+Получите информацию, за какой месяц была получена наибольшая сумма платежей, и добавьте информацию по количеству аренд за этот месяц.
+#### Решение 3  
+```sql
+SELECT DATE_FORMAT(payment_date, '%m-%Y') AS payment_month, COUNT(rental_id) AS rent_quanity, SUM(amount) AS total_amount FROM payment GROUP BY payment_month ORDER BY total_amount DESC LIMIT 1;
 ```  
-mysql> SELECT rental_id, payment_id, payment_date FROM payment ORDER BY payment_date DESC LIMIT 5;
-```  
-![Скриншот-3](https://github.com/GubinaAV/12-03/blob/main/img/SQL3.png)  
-
-### Задание 4
-
-Одним запросом получите активных покупателей, имена которых Kelly или Willie. 
-
-Сформируйте вывод в результат таким образом:
-- все буквы в фамилии и имени из верхнего регистра переведите в нижний регистр,
-- замените буквы 'll' в именах на 'pp'.  
-#### Решение 4  
-```  
-mysql> SELECT LOWER (last_name) AS last_name, LOWER (first_name) AS first_name, REPLACE (LOWER (first_name), 'll', 'pp') AS new_first_name FROM customer WHERE first_name = 'Kelly' OR first_name = 'Willie' AND active = 1;
-
-```  
-![Скриншот-4](https://github.com/GubinaAV/12-03/blob/main/img/SQL4.png)  
-
+![Скриншот 3(DBEaver)](https://github.com/GubinaAV/12-04/blob/main/img/screen3(DBr).png)  
+![Скриншот 3(MYSQL_cmd)](https://github.com/GubinaAV/12-04/blob/main/img/screen3(MSQLc).png)
 ## Дополнительные задания (со звёздочкой*)
 Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже шире разобраться в материале.
 
+### Задание 4*
+
+Посчитайте количество продаж, выполненных каждым продавцом. Добавьте вычисляемую колонку «Премия». Если количество продаж превышает 8000, то значение в колонке будет «Да», иначе должно быть значение «Нет».
+
 ### Задание 5*
 
-Выведите Email каждого покупателя, разделив значение Email на две отдельных колонки: в первой колонке должно быть значение, указанное до @, во второй — значение, указанное после @.
-#### Решение 5*  
-```  
-mysql> SELECT email,  SUBSTRING_INDEX(email, '@', 1) AS left_part, SUBSTRING_INDEX(email, '@', -1) AS right_part FROM customer;
-```  
-![Скриншот-5](https://github.com/GubinaAV/12-03/blob/main/img/SQL5.png)  
-
-### Задание 6*
-
-Доработайте запрос из предыдущего задания, скорректируйте значения в новых колонках: первая буква должна быть заглавной, остальные — строчными.
+Найдите фильмы, которые ни разу не брали в аренду.
