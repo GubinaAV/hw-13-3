@@ -50,9 +50,9 @@
 ##### Ответ 1  
 Логи Suricata содержат информацию о сканировании - время, ip адрес, порт, тип сканирования  
 
-![s1](https://github.com/GubinaAV/hw-13-3/blob/main/s1.png)
+![s1](https://github.com/GubinaAV/hw-13-3/blob/main/img/s1.png)
 
-![s2](https://github.com/GubinaAV/hw-13-3/blob/main/s2.png)
+![s2](https://github.com/GubinaAV/hw-13-3/blob/main/img/s2.png)
 
 ------
 
@@ -82,8 +82,8 @@
 *В качестве ответа пришлите события, которые попали в логи Suricata и Fail2Ban, прокомментируйте результат.*
 ##### Ответ2  
 Логи Fail2Ban выдают информацию о неудачных попытках входа по ssh - время, ip, и информацию о блокировке по ip адресу  
-![fb](https://github.com/GubinaAV/hw-13-3/blob/main/fb.png)  
+![fb](https://github.com/GubinaAV/hw-13-3/blob/main/img/fb.png)  
 При попытке просканировать хост с помощью гидры еще раз получаем уведомление об отказе.  
-![hydra](https://github.com/GubinaAV/hw-13-3/blob/main/hydra.png)  
+![hydra](https://github.com/GubinaAV/hw-13-3/blob/main/img/hydra.png)  
 Логи Suricata отображают массовое обращение к порту 22 - с указанием времени, ip адреса и порта.  
-![s3](https://github.com/GubinaAV/hw-13-3/blob/main/s3.png)
+![s3](https://github.com/GubinaAV/hw-13-3/blob/main/img/s3.png)
